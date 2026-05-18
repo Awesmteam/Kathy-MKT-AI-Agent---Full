@@ -8,27 +8,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ─── Tokens ─────────────────────────────────────────────── */
+    /* ─── Custom easing curves (Emil Kowalski principles) ───── */
     :root {
-      --olive-deep:   #4a4a2a;
-      --olive-mid:    #6b6b3a;
-      --olive-light:  #8a8a50;
-      --olive-pale:   #c8c89a;
-      --cream:        #f7f4ee;
-      --cream-dark:   #ede8dc;
-      --sand:         #d6ccb4;
-      --terracotta:   #c07a50;
-      --terra-dark:   #9e5e38;
-      --terra-light:  #e8a07a;
-      --text-dark:    #2c2c1a;
-      --text-body:    #4a4438;
-      --text-muted:   #7a7060;
-      --white:        #ffffff;
-      --radius:       8px;
-      --radius-lg:    16px;
+      --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      --olive-deep:  #4a4a2a;
+      --olive-mid:   #6b6b3a;
+      --olive-light: #8a8a50;
+      --olive-pale:  #c8c89a;
+      --cream:       #f7f4ee;
+      --cream-dark:  #ede8dc;
+      --sand:        #d6ccb4;
+      --terracotta:  #c07a50;
+      --terra-dark:  #9e5e38;
+      --terra-light: #e8a07a;
+      --text-dark:   #2c2c1a;
+      --text-body:   #4a4438;
+      --text-muted:  #7a7060;
+      --white:       #ffffff;
+      --radius:      8px;
+      --radius-lg:   16px;
     }
 
-    /* ─── Reset ──────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -37,25 +40,46 @@
       color: var(--text-body);
       font-size: 16px;
       line-height: 1.65;
+      overflow-x: hidden;
     }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
 
-    /* ─── Utility ────────────────────────────────────────────── */
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 24px;
+    /* ─── Scroll-reveal base ─────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity 600ms var(--ease-out),
+        transform 600ms var(--ease-out);
     }
-    .section { padding: 80px 0; }
-    .section--alt { background: var(--cream-dark); }
-    .section--dark { background: var(--olive-deep); color: var(--cream); }
-    .section--terra { background: var(--terracotta); color: var(--white); }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Stagger children */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 500ms var(--ease-out),
+        transform 500ms var(--ease-out);
+    }
+    .reveal-stagger.visible > *:nth-child(1)  { transition-delay: 0ms;   opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(2)  { transition-delay: 60ms;  opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(3)  { transition-delay: 120ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(4)  { transition-delay: 180ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(5)  { transition-delay: 240ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(6)  { transition-delay: 300ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(7)  { transition-delay: 360ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(8)  { transition-delay: 420ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(9)  { transition-delay: 480ms; opacity:1; transform:translateY(0); }
+    .reveal-stagger.visible > *:nth-child(10) { transition-delay: 540ms; opacity:1; transform:translateY(0); }
 
-    h1, h2, h3, h4 {
-      font-family: 'Playfair Display', serif;
-      line-height: 1.25;
-    }
+    /* ─── Utility ────────────────────────────────────────────── */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 80px 0; }
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.25; }
     .eyebrow {
       font-family: 'Inter', sans-serif;
       font-size: 11px;
@@ -64,12 +88,19 @@
       text-transform: uppercase;
       color: var(--olive-light);
     }
-    .section--dark .eyebrow  { color: var(--olive-pale); }
-    .section--terra .eyebrow { color: rgba(255,255,255,.75); }
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--terracotta);
+      border-radius: 2px;
+      margin: 20px 0 36px;
+    }
 
-    /* ─── CTA Button ─────────────────────────────────────────── */
+    /* ─── Buttons ────────────────────────────────────────────── */
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       padding: 18px 36px;
       border-radius: var(--radius);
       font-family: 'Inter', sans-serif;
@@ -78,9 +109,24 @@
       letter-spacing: .04em;
       cursor: pointer;
       border: none;
-      transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 160ms var(--ease-out),
+        box-shadow 160ms var(--ease-out),
+        background-color 200ms ease;
     }
+    /* Ripple layer */
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 400ms ease;
+    }
+    .btn:hover::after  { background: rgba(255,255,255,.07); }
     .btn:active { transform: scale(0.97); }
+
     .btn--primary {
       background: var(--terracotta);
       color: var(--white);
@@ -88,52 +134,89 @@
     }
     .btn--primary:hover {
       background: var(--terra-dark);
-      box-shadow: 0 6px 28px rgba(192,122,80,.45);
+      box-shadow: 0 8px 32px rgba(192,122,80,.45);
+      transform: translateY(-2px);
     }
+    .btn--primary:active { transform: scale(0.97) translateY(0); }
+
     .btn--outline {
       background: transparent;
       color: var(--white);
-      border: 2px solid var(--white);
+      border: 2px solid rgba(255,255,255,.6);
     }
-    .btn--outline:hover { background: rgba(255,255,255,.1); }
+    .btn--outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,.1);
+      transform: translateY(-2px);
+    }
     .btn--lg { padding: 20px 44px; font-size: 16px; }
-    .btn-wrap { text-align: center; margin-top: 32px; }
+    .btn-wrap { text-align: center; margin-top: 40px; }
 
     /* ─── TOP BAR ────────────────────────────────────────────── */
     .topbar {
       background: var(--olive-deep);
       color: var(--olive-pale);
       text-align: center;
-      padding: 10px 24px;
+      padding: 11px 24px;
       font-size: 12px;
       letter-spacing: .08em;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transform: translateY(0);
+      transition: transform 300ms var(--ease-out);
     }
+    .topbar.hidden { transform: translateY(-100%); }
     .topbar strong { color: var(--cream); }
+    /* Pulsing dot */
+    .topbar .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      margin-right: 8px;
+      vertical-align: middle;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(1.4); }
+    }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 1 — HERO
     ═══════════════════════════════════════════════════════════ */
     .hero {
-      background: linear-gradient(
-        160deg,
-        #3d3d22 0%,
-        #5a5830 40%,
-        #7a6a40 100%
-      );
+      background: linear-gradient(160deg, #3d3d22 0%, #5a5830 40%, #7a6a40 100%);
       color: var(--cream);
-      padding: 0;
       position: relative;
       overflow: hidden;
     }
-    .hero::before {
-      content: '';
+    /* Animated ambient blobs */
+    .hero-blob {
       position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 80% 40%, rgba(192,122,80,.18) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(74,74,42,.4) 0%, transparent 60%);
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .18;
       pointer-events: none;
     }
+    .hero-blob--1 {
+      width: 500px; height: 500px;
+      background: var(--terracotta);
+      top: -100px; right: -80px;
+      animation: blob-drift 12s ease-in-out infinite alternate;
+    }
+    .hero-blob--2 {
+      width: 400px; height: 400px;
+      background: var(--olive-pale);
+      bottom: -120px; left: -60px;
+      animation: blob-drift 15s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes blob-drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.1); }
+    }
+
     .hero-inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -146,79 +229,79 @@
       position: relative;
       z-index: 1;
     }
-    .hero-text { }
     .hero-eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase;
       color: var(--terra-light);
       margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade-up 700ms 100ms var(--ease-out) forwards;
     }
     .hero h1 {
-      font-size: clamp(32px, 5vw, 52px);
+      font-size: clamp(30px, 4.5vw, 50px);
       font-weight: 700;
       color: var(--cream);
       margin-bottom: 24px;
+      opacity: 0;
+      animation: hero-fade-up 700ms 200ms var(--ease-out) forwards;
     }
-    .hero h1 em {
-      font-style: italic;
-      color: var(--terra-light);
-    }
+    .hero h1 em { font-style: italic; color: var(--terra-light); }
     .hero-sub {
-      font-size: 17px;
-      line-height: 1.7;
+      font-size: 17px; line-height: 1.7;
       color: rgba(247,244,238,.85);
       margin-bottom: 36px;
       max-width: 480px;
+      opacity: 0;
+      animation: hero-fade-up 700ms 350ms var(--ease-out) forwards;
     }
     .hero-sub strong { color: var(--cream); font-weight: 600; }
+    .hero-cta-wrap {
+      opacity: 0;
+      animation: hero-fade-up 700ms 480ms var(--ease-out) forwards;
+    }
 
-    /* Image placeholder */
+    @keyframes hero-fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero image */
     .hero-image {
       border-radius: var(--radius-lg);
       overflow: hidden;
       position: relative;
       aspect-ratio: 4/5;
       background: linear-gradient(135deg, #5a5830 0%, #8a7050 50%, #c8a070 100%);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      box-shadow: 0 24px 60px rgba(0,0,0,.35);
+      display: flex; align-items: flex-end; justify-content: center;
+      box-shadow: 0 32px 80px rgba(0,0,0,.4);
+      opacity: 0;
+      transform: translateY(30px) scale(0.97);
+      animation: hero-image-in 900ms 300ms var(--ease-out) forwards;
+    }
+    @keyframes hero-image-in {
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
     .hero-image-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       gap: 12px;
-      color: rgba(255,255,255,.5);
-      font-size: 14px;
-      font-style: italic;
-      text-align: center;
+      color: rgba(255,255,255,.45);
+      font-size: 13px; font-style: italic; text-align: center;
       padding: 24px;
     }
-    .hero-image-placeholder svg { opacity: .4; }
     .hero-image-caption {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: linear-gradient(0deg, rgba(0,0,0,.6) 0%, transparent 100%);
-      padding: 32px 20px 20px;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,.65) 0%, transparent 100%);
+      padding: 40px 20px 20px;
       color: rgba(247,244,238,.8);
-      font-size: 13px;
-      font-style: italic;
-      text-align: center;
+      font-size: 13px; font-style: italic; text-align: center;
     }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 2 — PÅMELDINGSSKJEMA
     ═══════════════════════════════════════════════════════════ */
-    .signup {
-      background: var(--cream-dark);
-      padding: 80px 0;
-    }
+    .signup { background: var(--cream-dark); padding: 80px 0; }
     .signup-box {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -232,264 +315,294 @@
       color: var(--white);
       border-radius: var(--radius);
       padding: 10px 18px;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 13px; font-weight: 600;
       display: inline-block;
       margin-bottom: 28px;
       letter-spacing: .03em;
+      animation: urgency-pulse 3s ease-in-out infinite;
     }
-    .signup-box h2 {
-      font-size: 28px;
-      color: var(--text-dark);
-      margin-bottom: 28px;
+    @keyframes urgency-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(192,122,80,0); }
+      50%      { box-shadow: 0 0 0 8px rgba(192,122,80,0); }
     }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    .signup-box h2 { font-size: 28px; color: var(--text-dark); margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Floating label fields */
+    .field {
+      position: relative;
+      margin-bottom: 20px;
     }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-    .form-group label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: .02em;
-    }
-    .form-group input {
-      padding: 13px 16px;
+    .field input {
+      width: 100%;
+      padding: 22px 16px 8px;
       border: 1.5px solid var(--sand);
       border-radius: var(--radius);
       font-family: 'Inter', sans-serif;
       font-size: 15px;
       color: var(--text-dark);
       background: var(--cream);
-      transition: border-color 150ms ease-out;
       outline: none;
+      transition:
+        border-color 200ms var(--ease-out),
+        background 200ms ease,
+        box-shadow 200ms var(--ease-out);
     }
-    .form-group input:focus { border-color: var(--olive-mid); background: var(--white); }
-    .form-group input::placeholder { color: var(--text-muted); opacity: .6; }
-    .gdpr {
+    .field input:focus {
+      border-color: var(--olive-mid);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(107,107,58,.12);
+    }
+    .field label {
+      position: absolute;
+      left: 16px; top: 15px;
+      font-size: 15px;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition:
+        transform 180ms var(--ease-out),
+        font-size 180ms var(--ease-out),
+        color 180ms ease;
+      transform-origin: left top;
+    }
+    .field input:focus ~ label,
+    .field input:not(:placeholder-shown) ~ label {
+      transform: translateY(-8px) scale(0.75);
+      color: var(--olive-mid);
+    }
+    .field input::placeholder { color: transparent; }
+    .field-hint {
       font-size: 12px;
       color: var(--text-muted);
-      line-height: 1.6;
-      margin-top: 8px;
-      margin-bottom: 24px;
-      padding-top: 12px;
-      border-top: 1px solid var(--sand);
+      margin-top: 5px;
+      padding-left: 2px;
     }
-    .form-submit { width: 100%; text-align: center; padding: 20px 0; font-size: 15px; }
+
+    .gdpr {
+      font-size: 12px; color: var(--text-muted);
+      line-height: 1.6; margin-top: 8px; margin-bottom: 24px;
+      padding-top: 14px; border-top: 1px solid var(--sand);
+    }
+    .form-submit {
+      width: 100%; padding: 20px 0;
+      font-size: 15px; letter-spacing: .04em;
+    }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 3 — SMERTE
     ═══════════════════════════════════════════════════════════ */
     .pain { padding: 80px 0; }
     .pain h2 {
-      font-size: clamp(24px, 4vw, 36px);
+      font-size: clamp(22px, 3.5vw, 34px);
       color: var(--text-dark);
       margin-bottom: 36px;
     }
-    .checklist {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 40px;
-    }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
     .checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      font-size: 16px;
-      color: var(--text-body);
-      line-height: 1.5;
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: 16px; color: var(--text-body); line-height: 1.5;
+      cursor: pointer;
+      transition: color 200ms ease;
     }
+    .checklist li:hover { color: var(--text-dark); }
     .check-box {
-      width: 22px;
-      height: 22px;
-      min-width: 22px;
+      width: 22px; height: 22px; min-width: 22px;
       border: 2px solid var(--olive-pale);
-      border-radius: 4px;
+      border-radius: 5px;
       margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      transition:
+        border-color 200ms var(--ease-out),
+        background 200ms var(--ease-out),
+        transform 150ms var(--ease-spring);
+      flex-shrink: 0;
     }
+    .check-box svg {
+      opacity: 0;
+      transform: scale(0.5);
+      transition:
+        opacity 200ms var(--ease-out),
+        transform 200ms var(--ease-spring);
+    }
+    .checklist li.checked .check-box {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      transform: scale(1.1);
+    }
+    .checklist li.checked .check-box svg { opacity: 1; transform: scale(1); }
+    .checklist li.checked { color: var(--text-dark); }
+    .checklist li.checked span { text-decoration: line-through; opacity: .6; }
+
     .pain-close {
-      background: var(--olive-deep);
-      color: var(--cream);
+      background: var(--olive-deep); color: var(--cream);
       border-radius: var(--radius-lg);
       padding: 28px 36px;
-      font-size: 17px;
-      line-height: 1.7;
-      margin-top: 8px;
+      font-size: 17px; line-height: 1.7;
     }
     .pain-close strong { color: var(--terra-light); }
+
+    /* Count badge */
+    .check-counter {
+      display: inline-block;
+      background: var(--terracotta);
+      color: var(--white);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px; font-weight: 600;
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition:
+        opacity 200ms var(--ease-out),
+        transform 200ms var(--ease-spring);
+    }
+    .check-counter.visible { opacity: 1; transform: scale(1); }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 4 — HVA DU LÆRER
     ═══════════════════════════════════════════════════════════ */
     .learn { padding: 80px 0; background: var(--cream-dark); }
-    .learn h2 {
-      font-size: clamp(26px, 4vw, 38px);
-      color: var(--text-dark);
-      margin-bottom: 48px;
-    }
-    .learn-items { display: flex; flex-direction: column; gap: 36px; }
+    .learn h2 { font-size: clamp(24px, 4vw, 38px); color: var(--text-dark); margin-bottom: 48px; }
+    .learn-items { display: flex; flex-direction: column; gap: 0; }
     .learn-item {
       display: grid;
-      grid-template-columns: 56px 1fr;
-      gap: 24px;
-      align-items: start;
+      grid-template-columns: 64px 1fr;
+      gap: 28px; align-items: start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--sand);
+      position: relative;
     }
+    .learn-item:last-child { border-bottom: none; }
+    /* Animated connector line */
+    .learn-item::before {
+      content: '';
+      position: absolute;
+      left: 31px; top: 64px;
+      width: 2px;
+      height: calc(100% - 64px);
+      background: linear-gradient(to bottom, var(--terracotta), transparent);
+      opacity: .3;
+    }
+    .learn-item:last-child::before { display: none; }
     .learn-num {
-      width: 56px;
-      height: 56px;
+      width: 64px; height: 64px;
       border-radius: 50%;
       background: var(--terracotta);
       color: var(--white);
       font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 24px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(192,122,80,.3);
+      box-shadow: 0 4px 20px rgba(192,122,80,.3);
+      transition: transform 300ms var(--ease-spring), box-shadow 300ms ease;
     }
-    .learn-item h3 {
-      font-size: 20px;
-      color: var(--text-dark);
-      margin-bottom: 10px;
+    .learn-item:hover .learn-num {
+      transform: scale(1.08);
+      box-shadow: 0 8px 28px rgba(192,122,80,.45);
     }
-    .learn-item p { color: var(--text-body); font-size: 15.5px; line-height: 1.7; }
+    .learn-item h3 { font-size: 20px; color: var(--text-dark); margin-bottom: 10px; }
+    .learn-item p  { color: var(--text-body); font-size: 15.5px; line-height: 1.7; }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 5 — VITENSKAP
     ═══════════════════════════════════════════════════════════ */
     .science { padding: 80px 0; background: var(--olive-deep); color: var(--cream); }
-    .science h2 {
-      font-size: clamp(24px, 4vw, 36px);
-      color: var(--cream);
-      margin-bottom: 28px;
-    }
+    .science .eyebrow { color: var(--olive-pale); }
+    .science h2 { font-size: clamp(22px, 4vw, 36px); color: var(--cream); margin-bottom: 28px; }
     .science-lead {
-      font-size: 18px;
-      font-style: italic;
+      font-size: 18px; font-style: italic;
       color: var(--olive-pale);
       border-left: 3px solid var(--terracotta);
       padding-left: 20px;
-      margin-bottom: 36px;
-      line-height: 1.7;
+      margin-bottom: 36px; line-height: 1.7;
     }
     .science-body { font-size: 16px; line-height: 1.8; color: rgba(247,244,238,.85); margin-bottom: 20px; }
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 48px;
-    }
+
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
     .stat-card {
       background: rgba(255,255,255,.07);
-      border: 1px solid rgba(200,200,154,.2);
+      border: 1px solid rgba(200,200,154,.15);
       border-radius: var(--radius-lg);
-      padding: 28px 24px;
-      text-align: center;
+      padding: 32px 24px; text-align: center;
+      transition:
+        transform 250ms var(--ease-out),
+        background 250ms ease,
+        border-color 250ms ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,.11);
+      border-color: rgba(200,200,154,.3);
     }
     .stat-num {
       font-family: 'Playfair Display', serif;
-      font-size: 42px;
-      font-weight: 700;
+      font-size: 44px; font-weight: 700;
       color: var(--terra-light);
-      line-height: 1;
-      margin-bottom: 8px;
+      line-height: 1; margin-bottom: 10px;
+      transition: color 200ms ease;
     }
+    .stat-card:hover .stat-num { color: #f0c0a0; }
     .stat-label { font-size: 13px; color: var(--olive-pale); line-height: 1.5; }
     .science-close {
       margin-top: 48px;
-      font-size: 17px;
-      color: var(--cream);
+      font-size: 18px; color: var(--cream);
       font-style: italic;
       font-family: 'Playfair Display', serif;
+      padding-left: 20px;
+      border-left: 3px solid rgba(232,160,122,.5);
     }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 6 — FOR / IKKE FOR
     ═══════════════════════════════════════════════════════════ */
     .fit { padding: 80px 0; }
-    .fit h2 {
-      font-size: clamp(24px, 4vw, 36px);
-      color: var(--text-dark);
-      margin-bottom: 40px;
-      text-align: center;
-    }
-    .fit-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
+    .fit h2 { font-size: clamp(22px, 4vw, 36px); color: var(--text-dark); margin-bottom: 40px; text-align: center; }
+    .fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
     .fit-card {
-      border-radius: var(--radius-lg);
-      padding: 36px 32px;
+      border-radius: var(--radius-lg); padding: 36px 32px;
+      transition: transform 250ms var(--ease-out), box-shadow 250ms ease;
     }
-    .fit-card--yes { background: #edf0e4; border: 1.5px solid #b8c29a; }
-    .fit-card--no  { background: #f5ede8; border: 1.5px solid #ddb09a; }
-    .fit-card h3 {
-      font-size: 20px;
-      margin-bottom: 20px;
+    .fit-card:hover { transform: translateY(-4px); }
+    .fit-card--yes {
+      background: #edf0e4; border: 1.5px solid #b8c29a;
+      box-shadow: 0 4px 20px rgba(107,107,58,.08);
     }
+    .fit-card--yes:hover { box-shadow: 0 12px 36px rgba(107,107,58,.15); }
+    .fit-card--no  {
+      background: #f5ede8; border: 1.5px solid #ddb09a;
+      box-shadow: 0 4px 20px rgba(192,122,80,.08);
+    }
+    .fit-card--no:hover  { box-shadow: 0 12px 36px rgba(192,122,80,.15); }
+    .fit-card h3 { font-size: 20px; margin-bottom: 20px; }
     .fit-card--yes h3 { color: var(--olive-mid); }
     .fit-card--no  h3 { color: var(--terra-dark); }
     .fit-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-    .fit-list li {
-      display: flex;
-      gap: 12px;
-      font-size: 15px;
-      line-height: 1.5;
-      color: var(--text-body);
-    }
-    .fit-list li::before { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-    .fit-card--yes .fit-list li::before { content: '✓'; color: var(--olive-mid); font-weight: 700; }
-    .fit-card--no  .fit-list li::before { content: '✗'; color: var(--terra-dark); font-weight: 700; }
+    .fit-list li { display: flex; gap: 12px; font-size: 15px; line-height: 1.5; color: var(--text-body); }
+    .fit-list li::before { font-size: 16px; flex-shrink: 0; margin-top: 1px; font-weight: 700; }
+    .fit-card--yes .fit-list li::before { content: '✓'; color: var(--olive-mid); }
+    .fit-card--no  .fit-list li::before { content: '✗'; color: var(--terra-dark); }
 
     /* ═══════════════════════════════════════════════════════════
        BLOKK 7 — OM EVA
     ═══════════════════════════════════════════════════════════ */
     .about { padding: 80px 0; background: var(--cream-dark); }
-    .about-inner {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 60px;
-      align-items: start;
-    }
+    .about-inner { display: grid; grid-template-columns: 280px 1fr; gap: 60px; align-items: start; }
     .about-photo {
-      border-radius: var(--radius-lg);
-      overflow: hidden;
+      border-radius: var(--radius-lg); overflow: hidden;
       aspect-ratio: 3/4;
       background: linear-gradient(135deg, #8a7050 0%, #c8a070 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,.5);
-      font-size: 13px;
-      font-style: italic;
-      text-align: center;
-      padding: 20px;
-      box-shadow: 0 12px 40px rgba(74,68,56,.18);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.45); font-size: 13px; font-style: italic;
+      text-align: center; padding: 20px;
+      box-shadow: 0 16px 48px rgba(74,68,56,.2);
+      transition: transform 400ms var(--ease-out), box-shadow 400ms ease;
     }
-    .about h2 {
-      font-size: clamp(26px, 3.5vw, 38px);
-      color: var(--text-dark);
-      margin-bottom: 24px;
+    .about-photo:hover {
+      transform: scale(1.02);
+      box-shadow: 0 24px 64px rgba(74,68,56,.28);
     }
-    .about p {
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--text-body);
-      margin-bottom: 18px;
-    }
-    .about p:last-child { margin-bottom: 0; }
+    .about h2 { font-size: clamp(24px, 3.5vw, 38px); color: var(--text-dark); margin-bottom: 24px; }
+    .about p  { font-size: 16px; line-height: 1.8; color: var(--text-body); margin-bottom: 18px; }
     .about strong { color: var(--text-dark); font-weight: 600; }
 
     /* ═══════════════════════════════════════════════════════════
@@ -497,115 +610,139 @@
     ═══════════════════════════════════════════════════════════ */
     .final-cta {
       background: linear-gradient(135deg, var(--terracotta) 0%, var(--terra-dark) 100%);
-      color: var(--white);
-      padding: 80px 0;
-      text-align: center;
+      color: var(--white); padding: 80px 0; text-align: center;
+      position: relative; overflow: hidden;
     }
-    .final-cta h2 {
-      font-size: clamp(28px, 5vw, 48px);
-      color: var(--white);
-      margin-bottom: 16px;
+    /* Animated background shimmer */
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(255,255,255,.08) 0%, transparent 70%);
+      pointer-events: none;
     }
-    .final-cta .sub {
-      font-size: 18px;
-      color: rgba(255,255,255,.85);
-      margin-bottom: 40px;
-    }
+    .final-cta h2 { font-size: clamp(28px, 5vw, 48px); color: var(--white); margin-bottom: 16px; }
+    .final-cta .sub { font-size: 18px; color: rgba(255,255,255,.85); margin-bottom: 40px; }
+
     .logistics {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 12px 32px;
-      justify-content: center;
-      margin-bottom: 40px;
+      display: inline-flex; flex-wrap: wrap;
+      gap: 12px 32px; justify-content: center; margin-bottom: 40px;
     }
     .logistics-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-      color: rgba(255,255,255,.9);
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; color: rgba(255,255,255,.9);
+      transition: color 200ms ease;
     }
+    .logistics-item:hover { color: var(--white); }
     .logistics-item .icon { font-size: 18px; }
+
     .scarcity-box {
       background: rgba(0,0,0,.2);
       border: 1px solid rgba(255,255,255,.2);
       border-radius: var(--radius);
       padding: 16px 28px;
-      font-size: 14px;
-      color: rgba(255,255,255,.85);
-      margin: 32px auto 0;
-      max-width: 580px;
-      line-height: 1.6;
+      font-size: 14px; color: rgba(255,255,255,.85);
+      margin: 36px auto 0;
+      max-width: 560px; line-height: 1.6;
     }
     .scarcity-box strong { color: var(--white); }
 
     /* ─── Footer ─────────────────────────────────────────────── */
     footer {
+      background: var(--olive-deep); color: var(--olive-pale);
+      text-align: center; padding: 32px 24px; font-size: 13px;
+    }
+    footer a {
+      color: var(--terra-light);
+      transition: color 200ms ease;
+    }
+    footer a:hover { color: var(--cream); }
+
+    /* ─── Floating CTA bar (appears on scroll) ───────────────── */
+    .sticky-cta {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      z-index: 200;
       background: var(--olive-deep);
-      color: var(--olive-pale);
-      text-align: center;
-      padding: 32px 24px;
-      font-size: 13px;
+      color: var(--cream);
+      border-radius: 50px;
+      padding: 14px 28px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.35);
+      transition: transform 400ms var(--ease-out);
+      white-space: nowrap;
     }
+    .sticky-cta.visible { transform: translateX(-50%) translateY(0); }
+    .sticky-cta span { font-size: 14px; color: var(--olive-pale); }
+    .sticky-cta .btn { padding: 11px 22px; font-size: 13px; border-radius: 30px; }
 
-    /* ─── Divider ─────────────────────────────────────────────── */
-    .divider {
-      width: 60px;
-      height: 3px;
-      background: var(--terracotta);
-      border-radius: 2px;
-      margin: 20px 0 36px;
-    }
-
-    /* ─── Responsive ──────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-        padding: 60px 24px;
-        gap: 40px;
+    /* ─── Reduced motion ─────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
       }
+      .reveal, .reveal-stagger > * { opacity: 1; transform: none; }
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; padding: 56px 24px; gap: 36px; }
       .hero-image { aspect-ratio: 4/3; order: -1; }
-      .form-row { grid-template-columns: 1fr; }
-      .signup-box { padding: 36px 24px; }
-      .stats-row { grid-template-columns: 1fr; }
-      .fit-grid { grid-template-columns: 1fr; }
+      .form-row   { grid-template-columns: 1fr; }
+      .signup-box { padding: 32px 20px; }
+      .stats-row  { grid-template-columns: 1fr; gap: 16px; }
+      .fit-grid   { grid-template-columns: 1fr; }
       .about-inner { grid-template-columns: 1fr; }
       .about-photo { aspect-ratio: 3/2; }
-      .learn-item { grid-template-columns: 44px 1fr; gap: 16px; }
-      .learn-num { width: 44px; height: 44px; font-size: 18px; }
+      .learn-item { grid-template-columns: 52px 1fr; gap: 18px; }
+      .learn-num  { width: 52px; height: 52px; font-size: 20px; }
+      .sticky-cta { bottom: 16px; padding: 12px 20px; font-size: 13px; }
+      .sticky-cta span { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <strong>GRATIS LIVE-FOREDRAG</strong> &nbsp;·&nbsp; [DATO] kl [TID] &nbsp;·&nbsp; Direkte fra Cotignac, Provence
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar">
+    <span class="dot"></span>
+    <strong>GRATIS LIVE-FOREDRAG</strong>&nbsp;·&nbsp;[DATO] kl [TID]&nbsp;·&nbsp;Direkte fra Cotignac, Provence
+  </div>
+
+  <!-- Floating sticky CTA -->
+  <div class="sticky-cta" id="stickyCta">
+    <span>Gratis foredrag — [DATO]</span>
+    <a href="#pamelding" class="btn btn--primary">Sikre plassen</a>
   </div>
 
   <!-- ═══ BLOKK 1 — HERO ════════════════════════════════════ -->
   <section class="hero">
+    <div class="hero-blob hero-blob--1"></div>
+    <div class="hero-blob hero-blob--2"></div>
     <div class="hero-inner">
       <div class="hero-text">
         <p class="hero-eyebrow">GRATIS LIVE-FOREDRAG &nbsp;•&nbsp; [DATO] KL [TID] &nbsp;•&nbsp; DIREKTE FRA COTIGNAC, PROVENCE</p>
         <h1>
-          Du kjenner ikke deg selv igjen.<br />
-          <em>Det er ikke karakter-svikt —<br />det er biologi.</em><br />
-          Og maten din kan være med deg<br />eller mot deg.
+          Du kjenner ikke<br />deg selv igjen.<br />
+          <em>Det er ikke<br />karakter-svikt —<br />det er biologi.</em>
         </h1>
         <p class="hero-sub">
           60-minutters live foredrag på nett for <strong>norske kvinner 45+</strong> som har truffet «den perfekte stormen». Jeg viser deg hvordan kvinner i Provence lever middelhavsmat i samme livsfase – kalibrert for hjerne, hjerte, energi og vekt.
-          <br /><br />
-          Ingen diett. Ingen Wegovy. Ingen kalorier.
+          <br /><br />Ingen diett. Ingen Wegovy. Ingen kalorier.
         </p>
-        <a href="#pamelding" class="btn btn--primary btn--lg">👉 SIKRE PLASSEN MIN GRATIS</a>
+        <div class="hero-cta-wrap">
+          <a href="#pamelding" class="btn btn--primary btn--lg">👉 SIKRE PLASSEN MIN GRATIS</a>
+        </div>
       </div>
 
       <div class="hero-image">
         <div class="hero-image-placeholder">
-          <!-- Replace with: Bilde av Eva på markedet i Cotignac, naturlig, ikke posert -->
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".4">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
           </svg>
           <span>Bilde av Eva i Cotignac<br />(ikke stockfoto)</span>
         </div>
@@ -615,38 +752,35 @@
   </section>
 
   <!-- ═══ BLOKK 2 — PÅMELDINGSSKJEMA ══════════════════════════ -->
-  <section class="signup" id="pamelding">
+  <section class="signup reveal" id="pamelding">
     <div class="container">
       <div class="signup-box">
         <span class="signup-urgency">⚡ Plassene fylles fort opp – sikre din nå</span>
         <h2>Meld deg på det gratis foredraget</h2>
-
-        <form>
+        <form id="signupForm" novalidate>
           <div class="form-row">
-            <div class="form-group">
+            <div class="field">
+              <input type="text" id="fornavn" name="fornavn" placeholder=" " required />
               <label for="fornavn">Fornavn</label>
-              <input type="text" id="fornavn" name="fornavn" placeholder="Anne" />
             </div>
-            <div class="form-group">
+            <div class="field">
+              <input type="text" id="etternavn" name="etternavn" placeholder=" " required />
               <label for="etternavn">Etternavn</label>
-              <input type="text" id="etternavn" name="etternavn" placeholder="Johansen" />
             </div>
           </div>
-          <div class="form-group">
+          <div class="field">
+            <input type="email" id="epost" name="epost" placeholder=" " required />
             <label for="epost">E-post</label>
-            <input type="email" id="epost" name="epost" placeholder="anne@eksempel.no" />
           </div>
-          <div class="form-group">
+          <div class="field">
+            <input type="tel" id="telefon" name="telefon" placeholder=" " />
             <label for="telefon">Telefon (med landkode)</label>
-            <input type="tel" id="telefon" name="telefon" placeholder="+47 400 00 000" />
-            <span style="font-size:12px; color: var(--text-muted); margin-top:4px;">Du får én SMS-påminnelse på dagen</span>
+            <p class="field-hint">Du får én SMS-påminnelse på dagen</p>
           </div>
-
           <p class="gdpr">
             Jeg godtar GDPR-vilkårene og godtar å motta e-poster og SMS. Du kan svare STOPP for å avslutte abonnementet når som helst.
           </p>
-
-          <button type="submit" class="btn btn--primary form-submit">
+          <button type="submit" class="btn btn--primary form-submit" id="submitBtn">
             SIKRE PLASSEN MIN GRATIS
           </button>
         </form>
@@ -657,27 +791,55 @@
   <!-- ═══ BLOKK 3 — SMERTE ══════════════════════════════════ -->
   <section class="pain section">
     <div class="container">
-      <p class="eyebrow">Kjenner du deg igjen?</p>
-      <div class="divider"></div>
-      <h2>Hvis to eller flere av disse stemmer,<br />er dette foredraget for deg:</h2>
+      <p class="eyebrow reveal">Kjenner du deg igjen?</p>
+      <div class="divider reveal"></div>
+      <h2 class="reveal">Hvis to eller flere av disse stemmer,<br />er dette foredraget for deg:</h2>
 
-      <ul class="checklist">
-        <li><span class="check-box"></span> «Jeg gjør det samme som før, men det fungerer ikke lenger»</li>
-        <li><span class="check-box"></span> Vekten har snikt seg opp 4–9 kilo de siste 3–5 årene</li>
-        <li><span class="check-box"></span> Hjernetåke som ikke gir seg, særlig om ettermiddagen</li>
-        <li><span class="check-box"></span> Energien forsvinner kl 15, kommer ikke tilbake</li>
-        <li><span class="check-box"></span> Søvn som svikter 2–3 netter i uka</li>
-        <li><span class="check-box"></span> Hetetokter (eller bare en uforklarlig «varme»)</li>
-        <li><span class="check-box"></span> Du har prøvd 2+ dietter siden 2020. De funket. Til de ikke funket.</li>
-        <li><span class="check-box"></span> Du har vurdert Wegovy – eller er på det og vurderer å slutte</li>
-        <li><span class="check-box"></span> Du nekter å bli en sånn som teller kalorier eller kutter karbohydrater resten av livet</li>
+      <div id="checkCounter" class="check-counter">0 av 9 valgt</div>
+
+      <ul class="checklist reveal-stagger" id="checklist">
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>«Jeg gjør det samme som før, men det fungerer ikke lenger»</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Vekten har snikt seg opp 4–9 kilo de siste 3–5 årene</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Hjernetåke som ikke gir seg, særlig om ettermiddagen</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Energien forsvinner kl 15, kommer ikke tilbake</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Søvn som svikter 2–3 netter i uka</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Hetetokter (eller bare en uforklarlig «varme»)</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Du har prøvd 2+ dietter siden 2020. De funket. Til de ikke funket.</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Du har vurdert Wegovy – eller er på det og vurderer å slutte</span>
+        </li>
+        <li>
+          <span class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Du nekter å bli en sånn som teller kalorier eller kutter karbohydrater resten av livet</span>
+        </li>
       </ul>
 
-      <div class="pain-close">
+      <div class="pain-close reveal">
         Hvis du kjente deg igjen — så er du ikke alene. Det er ca <strong>140.000 norske kvinner</strong> som lever akkurat dette akkurat nå. Og de fleste er aldri blitt fortalt hva som faktisk skjer i kroppen.
       </div>
-
-      <div class="btn-wrap">
+      <div class="btn-wrap reveal">
         <a href="#pamelding" class="btn btn--primary">👉 SIKRE PLASSEN MIN GRATIS</a>
       </div>
     </div>
@@ -686,11 +848,10 @@
   <!-- ═══ BLOKK 4 — HVA DU LÆRER ═══════════════════════════ -->
   <section class="learn">
     <div class="container">
-      <p class="eyebrow">Hva du lærer</p>
-      <div class="divider"></div>
-      <h2>På 60 minutter får du:</h2>
-
-      <div class="learn-items">
+      <p class="eyebrow reveal">Hva du lærer</p>
+      <div class="divider reveal"></div>
+      <h2 class="reveal">På 60 minutter får du:</h2>
+      <div class="learn-items reveal-stagger">
         <div class="learn-item">
           <div class="learn-num">1</div>
           <div>
@@ -698,7 +859,6 @@
             <p>Den biologiske rammen som ingen norsk lege har gitt deg på 5-min-konsultasjonen. Du forstår hvorfor det ikke er deg, det er hormonell omstilling.</p>
           </div>
         </div>
-
         <div class="learn-item">
           <div class="learn-num">2</div>
           <div>
@@ -706,7 +866,6 @@
             <p>De fire byggeklossene i hver middag, og hvordan de spesifikt påvirker energi, hjerne, vekt og hetetokter. Bygget på ekte Provence-bondekjøkken, ikke «norsk middelhavskost».</p>
           </div>
         </div>
-
         <div class="learn-item">
           <div class="learn-num">3</div>
           <div>
@@ -715,8 +874,7 @@
           </div>
         </div>
       </div>
-
-      <div class="btn-wrap">
+      <div class="btn-wrap reveal">
         <a href="#pamelding" class="btn btn--primary">👉 JA – jeg vil ha plassen min</a>
       </div>
     </div>
@@ -725,31 +883,28 @@
   <!-- ═══ BLOKK 5 — VITENSKAP ═══════════════════════════════ -->
   <section class="science">
     <div class="container">
-      <p class="eyebrow" style="color: var(--olive-pale);">Vitenskapelig grunnlag</p>
-      <div class="divider"></div>
-      <h2>Dette er ikke wellness.<br />Det er det Helsedirektoratet selv anbefaler.</h2>
-
-      <p class="science-lead">
-        Helsedirektoratets retningslinje for forebygging av hjerte- og karsykdom anbefaler eksplisitt kosthold med fisk, hvitt kjøtt, frukt, grønnsaker, belgfrukter, nøtter og olivenolje.<br /><br />
-        Det er, ord for ord, middelhavsdietten.
+      <p class="eyebrow reveal">Vitenskapelig grunnlag</p>
+      <div class="divider reveal"></div>
+      <h2 class="reveal">Dette er ikke wellness.<br />Det er det Helsedirektoratet selv anbefaler.</h2>
+      <p class="science-lead reveal">
+        Helsedirektoratets retningslinje for forebygging av hjerte- og karsykdom anbefaler eksplisitt kosthold med fisk, hvitt kjøtt, frukt, grønnsaker, belgfrukter, nøtter og olivenolje.
+        <br /><br />Det er, ord for ord, middelhavsdietten.
       </p>
-
-      <div class="stats-row">
+      <div class="stats-row reveal-stagger">
         <div class="stat-card">
-          <div class="stat-num">~30%</div>
-          <div class="stat-label">redusert risiko for hjerteinfarkt og slag<br /><em style="opacity:.7">(PREDIMED, n≈7.500)</em></div>
+          <div class="stat-num" data-target="30" data-suffix="%">0%</div>
+          <div class="stat-label">redusert risiko for hjerteinfarkt og slag<br /><em style="opacity:.65">(PREDIMED, n≈7.500)</em></div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">8,8%</div>
-          <div class="stat-label">vektnedgang hos postmenopausale kvinner på 16 uker<br /><em style="opacity:.7">(Bajerska 2018)</em></div>
+          <div class="stat-num" data-target="8.8" data-suffix="%" data-decimals="1">0%</div>
+          <div class="stat-label">vektnedgang hos postmenopausale kvinner på 16 uker<br /><em style="opacity:.65">(Bajerska 2018)</em></div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">24,6%</div>
-          <div class="stat-label">bukfettnedgang hos postmenopausale kvinner på 16 uker<br /><em style="opacity:.7">(Bajerska 2018)</em></div>
+          <div class="stat-num" data-target="24.6" data-suffix="%" data-decimals="1">0%</div>
+          <div class="stat-label">bukfettnedgang hos postmenopausale kvinner på 16 uker<br /><em style="opacity:.65">(Bajerska 2018)</em></div>
         </div>
       </div>
-
-      <p class="science-close">
+      <p class="science-close reveal">
         «Forskjellen er at ingen viser deg hvordan det faktisk leves. Det er det jeg gjør på dette foredraget.»
       </p>
     </div>
@@ -758,11 +913,10 @@
   <!-- ═══ BLOKK 6 — FOR / IKKE FOR ══════════════════════════ -->
   <section class="fit section">
     <div class="container">
-      <p class="eyebrow" style="text-align:center">Er dette for deg?</p>
-      <div class="divider" style="margin: 20px auto 36px;"></div>
-      <h2>For deg — og ikke for deg</h2>
-
-      <div class="fit-grid">
+      <p class="eyebrow reveal" style="text-align:center">Er dette for deg?</p>
+      <div class="divider reveal" style="margin-left:auto;margin-right:auto;"></div>
+      <h2 class="reveal">For deg — og ikke for deg</h2>
+      <div class="fit-grid reveal-stagger">
         <div class="fit-card fit-card--yes">
           <h3>✓ For deg som:</h3>
           <ul class="fit-list">
@@ -773,7 +927,6 @@
             <li>Har ressurser til å investere i deg selv — men det må være voksent og varig</li>
           </ul>
         </div>
-
         <div class="fit-card fit-card--no">
           <h3>✗ Ikke for deg som:</h3>
           <ul class="fit-list">
@@ -783,8 +936,7 @@
           </ul>
         </div>
       </div>
-
-      <div class="btn-wrap">
+      <div class="btn-wrap reveal">
         <a href="#pamelding" class="btn btn--primary">👉 SIKRE PLASSEN MIN GRATIS</a>
       </div>
     </div>
@@ -794,20 +946,20 @@
   <section class="about">
     <div class="container">
       <div class="about-inner">
-        <div class="about-photo">
-          <!-- Replace with: Bilde av Eva på markedet i Cotignac, eller i kjøkkenet sitt. Naturlig, ikke posert. -->
-          <span style="font-size:13px; font-style:italic; opacity:.7; text-align:center;">Bilde av Eva<br />på markedet i Cotignac<br />(ikke posert)</span>
+        <div class="about-photo reveal">
+          <span>Bilde av Eva<br />på markedet i Cotignac<br />(naturlig, ikke posert)</span>
         </div>
-
         <div>
-          <p class="eyebrow">Om Eva</p>
-          <div class="divider"></div>
-          <h2>Hvem er Eva?</h2>
-          <p>Jeg heter <strong>Eva Knudsen</strong>. Jeg er i 40-årene og bor i Cotignac, en liten landsby i Provence. Jeg har vært her i 12 år.</p>
-          <p>Jeg er ikke lege. Jeg er ikke kostholdsekspert. Det jeg er, er en <strong>norsk kvinne som lever middelhavsmaten i samme livsfase som deg</strong>, og jeg har observert noe over mange år som har endret hvordan jeg forstår mat:</p>
-          <p>Kvinner i landsbyen min — naboer, svigerinner, vennenes mødre — i 50-, 60- og 70-åra, holder seg slankere, har mer energi, og er friskere lenger enn de fleste norske kvinner jeg kjenner. Uten dietter. Uten å telle. Uten å være «flinke».</p>
-          <p>De gjør noe annet. Og etter 12 år her vet jeg ganske godt hva det er.</p>
-          <p><strong>På dette foredraget viser jeg deg det.</strong></p>
+          <p class="eyebrow reveal">Om Eva</p>
+          <div class="divider reveal"></div>
+          <h2 class="reveal">Hvem er Eva?</h2>
+          <div class="reveal-stagger">
+            <p>Jeg heter <strong>Eva Knudsen</strong>. Jeg er i 40-årene og bor i Cotignac, en liten landsby i Provence. Jeg har vært her i 12 år.</p>
+            <p>Jeg er ikke lege. Jeg er ikke kostholdsekspert. Det jeg er, er en <strong>norsk kvinne som lever middelhavsmaten i samme livsfase som deg</strong>, og jeg har observert noe over mange år som har endret hvordan jeg forstår mat:</p>
+            <p>Kvinner i landsbyen min — naboer, svigerinner, vennenes mødre — i 50-, 60- og 70-åra, holder seg slankere, har mer energi, og er friskere lenger enn de fleste norske kvinner jeg kjenner. Uten dietter. Uten å telle. Uten å være «flinke».</p>
+            <p>De gjør noe annet. Og etter 12 år her vet jeg ganske godt hva det er.</p>
+            <p><strong>På dette foredraget viser jeg deg det.</strong></p>
+          </div>
         </div>
       </div>
     </div>
@@ -816,29 +968,121 @@
   <!-- ═══ BLOKK 8 — FINAL CTA ═══════════════════════════════ -->
   <section class="final-cta">
     <div class="container">
-      <p class="eyebrow" style="color:rgba(255,255,255,.7)">Sikre plassen din nå</p>
-      <h2>Gratis live-foredrag fra Provence</h2>
-      <p class="sub">For norske kvinner 45+ som er klare for en ny måte å tenke på mat og kropp</p>
-
-      <div class="logistics">
-        <div class="logistics-item"><span class="icon">📅</span> [DATO] kl [TID]</div>
-        <div class="logistics-item"><span class="icon">📍</span> På Zoom — mobil, nettbrett eller PC</div>
-        <div class="logistics-item"><span class="icon">⏱</span> 60 min foredrag + 15 min Q&A</div>
-        <div class="logistics-item"><span class="icon">💰</span> Helt gratis</div>
+      <p class="eyebrow reveal" style="color:rgba(255,255,255,.7)">Sikre plassen din nå</p>
+      <h2 class="reveal">Gratis live-foredrag fra Provence</h2>
+      <p class="sub reveal">For norske kvinner 45+ som er klare for en ny måte å tenke på mat og kropp</p>
+      <div class="logistics reveal-stagger">
+        <div class="logistics-item"><span class="icon">📅</span>[DATO] kl [TID]</div>
+        <div class="logistics-item"><span class="icon">📍</span>På Zoom — mobil, nettbrett eller PC</div>
+        <div class="logistics-item"><span class="icon">⏱</span>60 min foredrag + 15 min Q&A</div>
+        <div class="logistics-item"><span class="icon">💰</span>Helt gratis</div>
       </div>
-
-      <a href="#pamelding" class="btn btn--outline btn--lg">👉 SIKRE PLASSEN MIN</a>
-
-      <div class="scarcity-box">
+      <div class="reveal">
+        <a href="#pamelding" class="btn btn--outline btn--lg">👉 SIKRE PLASSEN MIN</a>
+      </div>
+      <div class="scarcity-box reveal">
         <strong>⚠️ OBS:</strong> Det blir IKKE tilgjengelig opptak til alle. Kun de som er live får full tilgang til ressursene jeg deler. Vær der live.
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
-    <p>© 2025 Eva Knudsen &nbsp;·&nbsp; Cotignac, Provence &nbsp;·&nbsp; <a href="#" style="color:var(--terra-light)">Personvern</a> &nbsp;·&nbsp; <a href="#" style="color:var(--terra-light)">Vilkår</a></p>
+    <p>© 2025 Eva Knudsen &nbsp;·&nbsp; Cotignac, Provence &nbsp;·&nbsp;
+      <a href="#">Personvern</a> &nbsp;·&nbsp; <a href="#">Vilkår</a>
+    </p>
   </footer>
 
+  <script>
+    /* ─── Topbar hide/show on scroll ──────────────────────── */
+    const topbar = document.getElementById('topbar');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      topbar.classList.toggle('hidden', y > lastY && y > 80);
+      lastY = y;
+    }, { passive: true });
+
+    /* ─── Sticky CTA appears after hero ──────────────────── */
+    const stickyCta  = document.getElementById('stickyCta');
+    const hero       = document.querySelector('.hero');
+    const heroObs    = new IntersectionObserver(
+      ([e]) => stickyCta.classList.toggle('visible', !e.isIntersecting),
+      { threshold: 0 }
+    );
+    heroObs.observe(hero);
+
+    /* ─── Scroll-reveal via IntersectionObserver ─────────── */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObs.observe(el));
+
+    /* ─── Stats counter animation ─────────────────────────── */
+    const counterObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.querySelectorAll('[data-target]').forEach(el => {
+          const target   = parseFloat(el.dataset.target);
+          const suffix   = el.dataset.suffix || '';
+          const decimals = parseInt(el.dataset.decimals || '0');
+          const duration = 1400;
+          const start    = performance.now();
+          function step(now) {
+            const p = Math.min((now - start) / duration, 1);
+            /* ease-out cubic */
+            const eased = 1 - Math.pow(1 - p, 3);
+            const val   = (target * eased).toFixed(decimals);
+            el.textContent = (decimals > 0 ? val : Math.round(val)) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+        counterObs.unobserve(entry.target);
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.stats-row').forEach(el => counterObs.observe(el));
+
+    /* ─── Interactive checklist ───────────────────────────── */
+    const counter = document.getElementById('checkCounter');
+    let checked = 0;
+    document.querySelectorAll('.checklist li').forEach(li => {
+      li.addEventListener('click', () => {
+        const wasChecked = li.classList.contains('checked');
+        li.classList.toggle('checked');
+        checked += wasChecked ? -1 : 1;
+        counter.textContent = `${checked} av 9 valgt`;
+        counter.classList.toggle('visible', checked > 0);
+      });
+    });
+
+    /* ─── Form submit with morphing button ───────────────── */
+    const form      = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitBtn.textContent = '✓ Du er påmeldt!';
+      submitBtn.style.background = 'var(--olive-mid)';
+      submitBtn.style.transform  = 'scale(0.98)';
+      setTimeout(() => { submitBtn.style.transform = ''; }, 160);
+    });
+
+    /* ─── Smooth anchor scroll accounting for topbar ─────── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const offset = topbar.offsetHeight + 16;
+        window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>
