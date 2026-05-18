@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meta Ads — Eva Knudsen | Creative & Copy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --olive:      #4a4a2a;
+      --olive-mid:  #6b6b3a;
+      --olive-pale: #c8c89a;
+      --cream:      #f7f4ee;
+      --cream-d:    #ede8dc;
+      --sand:       #d6ccb4;
+      --terra:      #c07a50;
+      --terra-d:    #9e5e38;
+      --terra-l:    #e8a07a;
+      --text:       #2c2c1a;
+      --muted:      #7a7060;
+      --white:      #fff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1a1a0f;
+      color: var(--cream);
+      padding: 40px 24px 80px;
+    }
+    /* ── Page header ── */
+    .page-header { max-width: 1100px; margin: 0 auto 56px; }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--cream); margin-bottom: 8px; }
+    .page-header p  { color: var(--olive-pale); font-size: 15px; }
+    .badge {
+      display: inline-block;
+      background: var(--terra);
+      color: var(--white);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 11px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* ── Section ── */
+    .section { max-width: 1100px; margin: 0 auto 80px; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: var(--cream);
+      margin-bottom: 6px;
+    }
+    .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+
+    /* ── Ad grid ── */
+    .ad-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .ad-wrap { }
+    .ad-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--olive-pale);
+      margin-bottom: 10px;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       CREATIVE: SQUARE 1:1  (1080×1080)
+    ───────────────────────────────────────────────────── */
+    .ad-square {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Variant A — Dark olive gradient */
+    .ad-square.v-a {
+      background: linear-gradient(145deg, #3a3a20 0%, #5a5430 55%, #7a6840 100%);
+    }
+    .ad-square.v-b {
+      background: linear-gradient(145deg, #6a3820 0%, #9e5e38 55%, #c07a50 100%);
+    }
+    .ad-square.v-c {
+      background: linear-gradient(160deg, #2a2a18 0%, #4a4a28 50%, #6a6838 100%);
+    }
+    .ad-square.v-d {
+      background: linear-gradient(135deg, #1e1e10 0%, #3a3a20 40%, #585030 100%);
+    }
+
+    /* Ambient blobs */
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(60px); pointer-events: none;
+    }
+    .blob-1 { width: 55%; height: 55%; background: rgba(192,122,80,.22); top: -10%; right: -10%; }
+    .blob-2 { width: 45%; height: 45%; background: rgba(200,200,154,.12); bottom: -8%; left: -8%; }
+
+    .ad-inner {
+      position: relative; z-index: 1;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 8%;
+    }
+
+    .ad-eyebrow {
+      font-size: clamp(9px, 1.1vw, 11px);
+      font-weight: 600; letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--terra-l);
+      margin-bottom: 10px;
+    }
+    .ad-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .ad-headline em { font-style: italic; color: var(--terra-l); }
+    .ad-sub {
+      font-size: clamp(11px, 1.4vw, 13px);
+      color: rgba(247,244,238,.78);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .ad-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--terra);
+      color: var(--white);
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: clamp(11px, 1.3vw, 13px);
+      font-weight: 700; letter-spacing: .04em;
+      width: fit-content;
+    }
+    .ad-top {
+      position: absolute; top: 8%; left: 8%; right: 8%;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .ad-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(13px, 1.6vw, 16px);
+      color: rgba(247,244,238,.7);
+    }
+    .ad-free-tag {
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: clamp(9px, 1vw, 11px);
+      font-weight: 600;
+      color: var(--cream);
+    }
+    /* Decorative divider */
+    .ad-rule {
+      width: 40px; height: 2px;
+      background: var(--terra);
+      border-radius: 2px;
+      margin-bottom: 14px;
+    }
+    /* Big stat variant */
+    .ad-stat {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(48px, 7vw, 72px);
+      font-weight: 700;
+      color: var(--terra-l);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .ad-stat-label {
+      font-size: clamp(12px, 1.5vw, 15px);
+      color: rgba(247,244,238,.75);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    /* Photo placeholder overlay */
+    .photo-zone {
+      position: absolute;
+      top: 0; right: 0;
+      width: 48%; height: 100%;
+      background: linear-gradient(135deg, #7a6840 0%, #c8a878 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .photo-zone::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #3a3a20 0%, transparent 40%);
+    }
+    .photo-placeholder {
+      color: rgba(255,255,255,.3);
+      font-size: 12px; font-style: italic; text-align: center;
+      position: relative; z-index: 1;
+      padding: 16px;
+    }
+    .photo-placeholder svg { display: block; margin: 0 auto 8px; }
+    .split-inner {
+      width: 52%; padding: 8% 0 8% 8%;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       CREATIVE: STORY 9:16
+    ───────────────────────────────────────────────────── */
+    .ad-story {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    .ad-story.s-a {
+      background: linear-gradient(175deg, #2e2e18 0%, #4a4828 35%, #7a6840 70%, #9e7850 100%);
+    }
+    .ad-story.s-b {
+      background: linear-gradient(175deg, #1e1e10 0%, #3a3818 30%, #5a5430 60%, #c07a50 100%);
+    }
+    .story-inner {
+      position: relative; z-index: 1;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      padding: 8% 8%;
+    }
+    .story-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: auto; }
+    .story-progress { display: flex; gap: 4px; }
+    .story-progress span {
+      flex: 1; height: 2px; border-radius: 2px;
+      background: rgba(255,255,255,.35);
+    }
+    .story-progress span.active { background: rgba(255,255,255,.9); }
+    .story-account {
+      display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    }
+    .story-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--terra); border: 2px solid rgba(255,255,255,.5);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 14px; color: var(--white);
+    }
+    .story-name { font-size: 12px; font-weight: 600; color: var(--cream); }
+    .story-body {
+      margin-top: auto;
+      padding-bottom: 6%;
+    }
+    .story-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 4.5vw, 36px);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .story-headline em { color: var(--terra-l); font-style: italic; }
+    .story-points {
+      list-style: none; margin-bottom: 24px;
+    }
+    .story-points li {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: clamp(12px, 2vw, 14px);
+      color: rgba(247,244,238,.85);
+      margin-bottom: 8px; line-height: 1.4;
+    }
+    .story-points li::before { content: '•'; color: var(--terra-l); flex-shrink: 0; font-size: 16px; line-height: 1.2; }
+    .story-cta {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--terra);
+      color: var(--white);
+      border-radius: 30px;
+      padding: 14px 24px;
+      font-size: clamp(12px, 2vw, 14px);
+      font-weight: 700; letter-spacing: .04em;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .story-swipe {
+      text-align: center;
+      font-size: 11px; color: rgba(255,255,255,.5);
+      letter-spacing: .1em; text-transform: uppercase;
+    }
+    .story-swipe svg { display: block; margin: 0 auto 4px; animation: swipe-up 1.8s ease-in-out infinite; }
+    @keyframes swipe-up {
+      0%,100% { transform: translateY(0); opacity: .5; }
+      50%      { transform: translateY(-5px); opacity: 1; }
+    }
+    /* Story large number variant */
+    .story-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(64px, 12vw, 96px);
+      font-weight: 700;
+      color: var(--terra-l);
+      line-height: .9;
+      margin-bottom: 8px;
+    }
+    .story-num-label {
+      font-size: clamp(14px, 2.5vw, 18px);
+      color: rgba(247,244,238,.8);
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       COPY CARDS
+    ───────────────────────────────────────────────────── */
+    .copy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .copy-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(200,200,154,.12);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .copy-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; color: var(--cream);
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(200,200,154,.15);
+    }
+    .copy-row { margin-bottom: 16px; }
+    .copy-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--terra-l);
+      margin-bottom: 5px;
+    }
+    .copy-text {
+      font-size: 14px; color: rgba(247,244,238,.85);
+      line-height: 1.65;
+      background: rgba(0,0,0,.2);
+      border-radius: 6px; padding: 10px 14px;
+      white-space: pre-line;
+    }
+    .copy-text strong { color: var(--cream); }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .tag {
+      font-size: 11px; background: rgba(192,122,80,.2);
+      border: 1px solid rgba(192,122,80,.3);
+      color: var(--terra-l); border-radius: 20px; padding: 3px 10px;
+    }
+
+    /* ─── Targeting table ── */
+    .target-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .target-table th {
+      text-align: left; padding: 10px 16px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--terra-l);
+      border-bottom: 1px solid rgba(200,200,154,.15);
+    }
+    .target-table td {
+      padding: 12px 16px;
+      color: rgba(247,244,238,.82);
+      border-bottom: 1px solid rgba(200,200,154,.07);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .target-table tr:last-child td { border-bottom: none; }
+    .target-table td:first-child { color: var(--olive-pale); font-weight: 600; width: 180px; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .ad-grid { grid-template-columns: 1fr; }
+      .copy-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <span class="badge">Meta Ads</span>
+    <h1>Ad Creatives & Copy</h1>
+    <p>Eva Knudsen — Gratis Live-Foredrag &nbsp;·&nbsp; 4 copy-varianter &nbsp;·&nbsp; Feed 1:1 &nbsp;+&nbsp; Story/Reel 9:16</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 1 — FEED 1:1 CREATIVES
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <p class="section-title">Feed Ads — 1:1 Square (1080×1080)</p>
+    <p class="section-sub">Bruk til Facebook Feed, Instagram Feed og Audience Network. Test minst 2 varianter mot hverandre.</p>
+    <div class="ad-grid">
+
+      <!-- Creative A — Pain hook, dark olive -->
+      <div class="ad-wrap">
+        <p class="ad-label">A — «Ikke deg, det er biologi»</p>
+        <div class="ad-square v-a">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="ad-top">
+            <span class="ad-logo">Eva Knudsen</span>
+            <span class="ad-free-tag">100% GRATIS</span>
+          </div>
+          <div class="ad-inner">
+            <p class="ad-eyebrow">Live foredrag · [DATO] kl [TID]</p>
+            <div class="ad-rule"></div>
+            <h2 class="ad-headline">
+              Du kjenner ikke<br />deg selv igjen.<br />
+              <em>Det er ikke deg —<br />det er biologi.</em>
+            </h2>
+            <p class="ad-sub">Gratis foredrag for norske kvinner 45+.<br />Ingen diett. Ingen Wegovy. Ingen kalorier.</p>
+            <div class="ad-cta">👉 Sikre plassen din gratis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Creative B — Provence curiosity, terracotta -->
+      <div class="ad-wrap">
+        <p class="ad-label">B — «Provence-hemmeligheten»</p>
+        <div class="ad-square v-b">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="ad-top">
+            <span class="ad-logo">Eva Knudsen</span>
+            <span class="ad-free-tag">100% GRATIS</span>
+          </div>
+          <div class="ad-inner">
+            <p class="ad-eyebrow">Fra Cotignac, Provence · [DATO]</p>
+            <div class="ad-rule"></div>
+            <h2 class="ad-headline">
+              Franske kvinner<br />i 50-åra er slankere.<br />
+              <em>De teller ikke<br />en eneste kalori.</em>
+            </h2>
+            <p class="ad-sub">Jeg bor her. Jeg vet hva de gjør.<br />Gratis live-foredrag for kvinner 45+.</p>
+            <div class="ad-cta">👉 Se foredraget gratis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Creative C — Split layout with photo zone -->
+      <div class="ad-wrap">
+        <p class="ad-label">C — Split med Eva-bilde (produksjon)</p>
+        <div class="ad-square v-c" style="display:flex; flex-direction:row;">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <!-- Photo half -->
+          <div class="photo-zone">
+            <div class="photo-placeholder">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bilde av Eva<br/>i Cotignac
+            </div>
+          </div>
+          <!-- Text half -->
+          <div class="split-inner" style="position:relative;z-index:2;">
+            <div class="ad-top" style="position:relative;top:auto;left:auto;right:auto;margin-bottom:auto;padding-top:8%;">
+              <span class="ad-free-tag">GRATIS</span>
+            </div>
+            <div style="padding-top:40%;">
+              <p class="ad-eyebrow" style="font-size:9px;">[DATO] · Live</p>
+              <div class="ad-rule"></div>
+              <h2 class="ad-headline" style="font-size:clamp(14px,2.2vw,20px);">
+                12 år i Provence.<br/>Nå viser jeg<br/>deg det.
+              </h2>
+              <p class="ad-sub" style="font-size:10px;margin-bottom:14px;">For kvinner 45+ som er lei av dietter.</p>
+              <div class="ad-cta" style="font-size:10px;padding:8px 12px;">Meld deg på</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Creative D — Big stat -->
+      <div class="ad-wrap">
+        <p class="ad-label">D — Statistikk-hook (PREDIMED)</p>
+        <div class="ad-square v-d">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="ad-top">
+            <span class="ad-logo">Eva Knudsen</span>
+            <span class="ad-free-tag">GRATIS FOREDRAG</span>
+          </div>
+          <div class="ad-inner">
+            <div class="ad-stat">~30%</div>
+            <div class="ad-stat-label">redusert risiko for hjerteinfarkt<br />— dokumentert av 7.500 kvinner</div>
+            <div class="ad-rule"></div>
+            <h2 class="ad-headline" style="font-size:clamp(15px,2.2vw,22px);">
+              Det er <em>middelhavsdietten.</em><br />Jeg viser deg<br />hvordan det faktisk leves.
+            </h2>
+            <p class="ad-sub">Gratis live-foredrag for norske kvinner 45+.</p>
+            <div class="ad-cta">👉 Sikre plassen</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 2 — STORY / REEL 9:16 CREATIVES
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <p class="section-title">Story & Reels Ads — 9:16 Vertical (1080×1920)</p>
+    <p class="section-sub">Instagram Stories, Facebook Stories, Reels. Hold tekst innenfor safe zone (midt 80%). Legg til logoen øverst.</p>
+    <div class="ad-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); max-width: 720px;">
+
+      <!-- Story A — Pain -->
+      <div class="ad-wrap">
+        <p class="ad-label">Story A — Biologi-hook</p>
+        <div class="ad-story s-a">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="story-inner">
+            <div>
+              <div class="story-progress">
+                <span class="active"></span><span></span><span></span>
+              </div>
+              <div class="story-account">
+                <div class="story-avatar">E</div>
+                <span class="story-name">Eva Knudsen</span>
+              </div>
+            </div>
+            <div class="story-body">
+              <p class="ad-eyebrow" style="margin-bottom:10px;">Gratis foredrag · [DATO]</p>
+              <h2 class="story-headline">
+                Det er ikke<br/>viljestyrke.<br/>
+                <em>Det er biologi.</em>
+              </h2>
+              <ul class="story-points">
+                <li>Vekten kryper opp selv om du gjør alt riktig</li>
+                <li>Energien forsvinner kl 15</li>
+                <li>Hjernetåke, hetetokter, søvn som svikter</li>
+              </ul>
+              <div class="story-cta">👉 Sikre plassen gratis</div>
+              <div class="story-swipe">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                Sveip opp
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story B — Stat number -->
+      <div class="ad-wrap">
+        <p class="ad-label">Story B — Tall-hook</p>
+        <div class="ad-story s-b">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="story-inner">
+            <div>
+              <div class="story-progress">
+                <span></span><span class="active"></span><span></span>
+              </div>
+              <div class="story-account">
+                <div class="story-avatar">E</div>
+                <span class="story-name">Eva Knudsen</span>
+              </div>
+            </div>
+            <div class="story-body">
+              <div class="story-num">140k</div>
+              <p class="story-num-label">norske kvinner lever dette akkurat nå — og er aldri blitt fortalt hva som faktisk skjer.</p>
+              <div class="ad-rule"></div>
+              <h2 class="story-headline" style="font-size:clamp(20px,4vw,30px);">
+                Gratis live-foredrag<br/>fra Provence.<br/>
+                <em>[DATO] kl [TID]</em>
+              </h2>
+              <div class="story-cta">👉 Meld deg på gratis</div>
+              <div class="story-swipe">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                Sveip opp
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 3 — AD COPY (4 VARIANTER)
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <p class="section-title">Ad Copy — 4 Varianter å teste</p>
+    <p class="section-sub">Primærtekst, overskrift og beskrivelse for hver variant. Kopier direkte inn i Meta Ads Manager.</p>
+    <div class="copy-grid">
+
+      <!-- Variant 1 -->
+      <div class="copy-card">
+        <h3>Variant 1 — «Det er ikke deg»<br/><span style="font-size:13px;font-weight:400;font-style:italic;color:var(--muted);">Pain/recognition hook</span></h3>
+        <div class="copy-row">
+          <p class="copy-label">Primærtekst</p>
+          <div class="copy-text">Du spiser det samme som alltid. Trener litt. Gjør ingenting annet.
+
+Likevel kryper vekten oppover – og energien er borte kl 15.
+
+Det er ikke manglende viljestyrke. Det er biologi.
+
+Rundt 45 skjer det noe hormonelt som gjør at alt det gamle ikke virker lenger. Og ingen lege har hatt tid til å fortelle deg det på en 5-minutters konsultasjon.
+
+Jeg heter Eva. Jeg bor i Provence og har observert noe over 12 år: kvinner her i 50-, 60-åra er friskere, slankere og har mer energi – uten dietter, uten medisiner.
+
+<strong>Gratis live-foredrag [DATO].</strong> 60 minutter. Bare kvinner 45+.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Overskrift</p>
+          <div class="copy-text">Gratis foredrag: Hva som faktisk skjer i kroppen din etter 45</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Beskrivelse</p>
+          <div class="copy-text">Ingen diett. Ingen Wegovy. Ingen kalorier. Live fra Cotignac, Provence.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">CTA-knapp</p>
+          <div class="copy-text">Registrer deg</div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Awareness</span>
+          <span class="tag">Bred målgruppe</span>
+          <span class="tag">Kald trafikk</span>
+        </div>
+      </div>
+
+      <!-- Variant 2 -->
+      <div class="copy-card">
+        <h3>Variant 2 — «Provence-hemmeligheten»<br/><span style="font-size:13px;font-weight:400;font-style:italic;color:var(--muted);">Curiosity/intrigue hook</span></h3>
+        <div class="copy-row">
+          <p class="copy-label">Primærtekst</p>
+          <div class="copy-text">Har du lagt merke til at kvinner i Frankrike i 50-åra ser... annerledes ut?
+
+Ikke tynnere av diett. Men roligere. Mer energi. Slankere uten å prøve.
+
+Jeg har bodd 12 år i Provence og sett det på nært hold – naboer, svigerinner, vennenes mødre. De gjør noe annet. Ikke etter en plan. Det er bare hvordan de lever.
+
+Etter 12 år her vet jeg ganske godt hva det er.
+
+<strong>Gratis live-foredrag [DATO] kl [TID].</strong> Jeg deler det jeg har lært – kalibrert for norske kvinner i overgang. 60 minutter. Direkte fra Cotignac.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Overskrift</p>
+          <div class="copy-text">Provence-prinsippet™ — for kvinner 45+ i overgang</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Beskrivelse</p>
+          <div class="copy-text">Gratis live-foredrag fra Cotignac, Provence. Begrenset antall plasser.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">CTA-knapp</p>
+          <div class="copy-text">Finn ut mer</div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Curiosity</span>
+          <span class="tag">Storytelling</span>
+          <span class="tag">Kald trafikk</span>
+        </div>
+      </div>
+
+      <!-- Variant 3 -->
+      <div class="copy-card">
+        <h3>Variant 3 — «Stopp å telle kalorier»<br/><span style="font-size:13px;font-weight:400;font-style:italic;color:var(--muted);">Counter-intuitive hook</span></h3>
+        <div class="copy-row">
+          <p class="copy-label">Primærtekst</p>
+          <div class="copy-text">Slutt å telle kalorier.
+
+Det er ikke det som virker for kvinner etter 45.
+
+Det skjer noe hormonelt i overgangsalderen som gjør at kroppen reagerer helt annerledes på mat enn før. De gamle triksene – kutte karbo, trene mer, spise mindre – de fungerte. Til de ikke fungerte.
+
+Det finnes en annen vei. Og den er ikke en diett.
+
+<strong>Gratis live-foredrag [DATO]</strong> – jeg viser deg hva Provence-prinsippet™ faktisk er, og hvordan du kan bruke det fra i kveld.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Overskrift</p>
+          <div class="copy-text">Slutt å telle kalorier. Gjør dette istedet.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Beskrivelse</p>
+          <div class="copy-text">For kvinner 45+ som er ferdig med dietter. 60 min live fra Provence. Gratis.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">CTA-knapp</p>
+          <div class="copy-text">Registrer deg</div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Konvertering</span>
+          <span class="tag">Sterk hook</span>
+          <span class="tag">Retargeting</span>
+        </div>
+      </div>
+
+      <!-- Variant 4 -->
+      <div class="copy-card">
+        <h3>Variant 4 — «Alternativet til Wegovy»<br/><span style="font-size:13px;font-weight:400;font-style:italic;color:var(--muted);">Topical/timely hook</span></h3>
+        <div class="copy-row">
+          <p class="copy-label">Primærtekst</p>
+          <div class="copy-text">Alle snakker om Wegovy.
+
+Ingen snakker om det faktiske problemet: kroppen din er i hormonell omstilling, og maten er den kraftigste knappen du har tilgang til – helt uten resept.
+
+Helsedirektoratet anbefaler eksplisitt middelhavsdietten for forebygging av hjerte- og karsykdom. Forskning viser ~30% redusert risiko for hjerteinfarkt og slag.
+
+Forskjellen er at ingen viser deg hvordan det faktisk leves. Det gjør jeg.
+
+<strong>Gratis live-foredrag [DATO]</strong> – for norske kvinner 45+ som vil ha en evidensbasert, ikke-medikamentell vei.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Overskrift</p>
+          <div class="copy-text">Det evidensbaserte alternativet ingen snakker om</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">Beskrivelse</p>
+          <div class="copy-text">Gratis foredrag. Vitenskap + ekte Provence-levemåte. For kvinner 45+.</div>
+        </div>
+        <div class="copy-row">
+          <p class="copy-label">CTA-knapp</p>
+          <div class="copy-text">Finn ut mer</div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Topical</span>
+          <span class="tag">Vitenskap-anker</span>
+          <span class="tag">Bred + retargeting</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 4 — TARGETING SETUP
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <p class="section-title">Målgruppe & Kampanjestruktur</p>
+    <p class="section-sub">Anbefalt oppsett for Meta Ads Manager. Start bredt, optimaliser etter 3–5 dagers data.</p>
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(200,200,154,.12);border-radius:12px;overflow:hidden;">
+      <table class="target-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Anbefaling</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kampanjemål</td>
+            <td>Leads (Meta Lead Gen) eller Conversions (landingsside)</td>
+          </tr>
+          <tr>
+            <td>Geografi</td>
+            <td>Norge</td>
+          </tr>
+          <tr>
+            <td>Alder</td>
+            <td>42–60 (litt bredere enn 45+ for å fange tidlig-interesse)</td>
+          </tr>
+          <tr>
+            <td>Kjønn</td>
+            <td>Kvinner</td>
+          </tr>
+          <tr>
+            <td>Interesser (lag 1)</td>
+            <td>Helse og velvære, Kosthold og ernæring, Middelhavsdiett, Menopause, Yoga/pilates for kvinner 40+</td>
+          </tr>
+          <tr>
+            <td>Interesser (lag 2)</td>
+            <td>Livsstil, Frankrike/Provence, Matlaging, Selvutvikling, «Kvinner over 40»-medier</td>
+          </tr>
+          <tr>
+            <td>Retargeting</td>
+            <td>Sidebesøk siste 30 dager + videovisere 50%+ + lignende målgruppe (LAL 1–3%)</td>
+          </tr>
+          <tr>
+            <td>Plassering</td>
+            <td>Instagram Feed + Stories, Facebook Feed — start med Advantage+ Placements</td>
+          </tr>
+          <tr>
+            <td>Budsjett (test)</td>
+            <td>200–400 kr/dag per annonsegruppe i testfasen (7 dager)</td>
+          </tr>
+          <tr>
+            <td>Antall varianter</td>
+            <td>2–3 creatives + 2 copy-varianter per annonsegruppe. La Meta optimere.</td>
+          </tr>
+          <tr>
+            <td>Testing</td>
+            <td>A/B test Variant 1 (pain) vs. Variant 2 (curiosity) som første split</td>
+          </tr>
+          <tr>
+            <td>Frekvens-tak</td>
+            <td>Sett frekvensbegrensning til maks 3 visninger/uke per person</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 5 — PRODUKSJONSNOTER
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <p class="section-title">Produksjonsnoter til designer</p>
+    <p class="section-sub">Hva som trengs for å gjøre kreativene klare til produksjon.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(200,200,154,.12);border-radius:10px;padding:24px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra-l);margin-bottom:10px;">Bilder</p>
+        <ul style="font-size:14px;color:rgba(247,244,238,.8);line-height:1.7;padding-left:18px;">
+          <li>Eva på markedet i Cotignac — naturlig, ikke posert</li>
+          <li>Eva i kjøkkenet — varm lys, naturlig omgivelse</li>
+          <li>Nærbilde av et Provence-måltid (olivenolje, grønnsaker, fisk)</li>
+          <li>Landsbymotiv fra Cotignac</li>
+        </ul>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(200,200,154,.12);border-radius:10px;padding:24px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra-l);margin-bottom:10px;">Størrelser å eksportere</p>
+        <ul style="font-size:14px;color:rgba(247,244,238,.8);line-height:1.7;padding-left:18px;">
+          <li>1080×1080 px — Feed 1:1</li>
+          <li>1080×1920 px — Story/Reel 9:16</li>
+          <li>1200×628 px — Feed landscape (valgfritt)</li>
+          <li>Alle i JPG/PNG, maks 20% tekstflate</li>
+        </ul>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(200,200,154,.12);border-radius:10px;padding:24px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra-l);margin-bottom:10px;">Designspråk</p>
+        <ul style="font-size:14px;color:rgba(247,244,238,.8);line-height:1.7;padding-left:18px;">
+          <li>Varme oliventoner + terrakotta (#c07a50)</li>
+          <li>Krem bakgrunn (#f7f4ee)</li>
+          <li>Playfair Display (serif) for overskrifter</li>
+          <li>Inter (sans-serif) for brødtekst</li>
+          <li>Naturlig lys — ikke studio</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
